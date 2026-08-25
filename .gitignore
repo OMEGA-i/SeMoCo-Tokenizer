@@ -1,0 +1,105 @@
+# Python / packaging
+.venv/
+.venv-eval/
+.venv-verify/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+dist/
+build/
+*.whl
+pip-wheel-metadata/
+
+# Test / coverage / type-check caches
+.pytest_cache/
+.cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+.tox/
+.nox/
+.mypy_cache/
+.pyre/
+.pytype/
+.ruff_cache/
+
+# Experiment outputs / trackers
+outputs/
+results/
+multirun/
+.hydra/
+experiments/generated/
+experiments/local_manifests/
+eval_compare_outputs/
+swanlog/
+wandb/
+mlruns/
+tb_logs/
+tensorboard/
+lightning_logs/
+runs/
+
+# Model / dataset binaries (obtain / build locally)
+*.ckpt
+*.pt
+*.pth
+*.bin
+*.safetensors
+*.onnx
+*.tflite
+*.h5
+*.npz
+*.npy
+*.parquet
+*.feather
+
+# ... except the tiny SOMA77 FK template that ships with the repo
+# (regenerable via `python -m tools.build_soma77_template`).
+!data/assets/soma77_template.npz
+
+# Logs / temp
+*.log
+*.log.*
+logs/
+tmp/
+temp/
+.tmp/
+
+# OS / editor / IDE
+.DS_Store
+._*
+Thumbs.db
+.idea/
+.vscode/
+.cursor/
+*.swp
+*.swo
+*.bak
+*.orig
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Ad-hoc local scratch
+tools/_*
+
+# Third-party teacher deps are git submodules under third_party/ (see README)
+
+# Agent / IDE contract files
+CLAUDE.md
+AGENTS.md
+
+# Local paper drafts
+/*.pdf

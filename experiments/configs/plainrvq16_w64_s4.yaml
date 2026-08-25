@@ -1,0 +1,59 @@
+codec:
+  input_dim: 499
+  backbone:
+    family: conv
+    latent_dim: 512
+    temporal_stride: 4
+    num_layers: 1
+    residual_blocks_per_stage: 3
+    dilation_growth_rate: 3
+    residual_dropout: 0.2
+    residual_norm: none
+    kernel_size: 3
+    causal: false
+    upsample_mode: nearest
+    decoder_head_mode: single
+  quantizer:
+    kind: ema_rvq
+    num_quantizers: 16
+    codebook_size: 1024
+    mu: 0.99
+    quantize_dropout: true
+    quantize_dropout_cutoff_index: 0
+    quantize_dropout_prob: 0.2
+    sample_codebook_temp: 0.5
+loss:
+  mode: fk_geom
+  root_header_alpha: 10.0
+  loss_vel: 0.0
+  fk_weight: 1.0
+  fk_vel_weight: 0.5
+  fk_acc_weight: 0.25
+  fk_footskate_weight: 0.5
+  grad_clip_norm: 1.0
+  weights:
+    vq: 0.02
+  tmr_distill:
+    enabled: false
+data:
+  training_cache_path: local://cache/umr_fixed_w64_train.npy
+  val_cache_path: local://cache/umr_fixed_w64_val.npy
+  window: 64
+  batch_size: 1024
+  num_workers: 6
+optim:
+  lr: 4.0e-4
+  weight_decay: 1.0e-4
+  betas: [0.9, 0.95]
+  warmup_steps: 500
+train:
+  max_epochs: 1000
+  precision: bf16
+  seed: 3407
+  log_every: 100
+  ckpt_every_epochs: 50
+  normalization_stats_json: local://cache/norm_stats.json
+swanlab:
+  enabled: false
+  project: SeMoCo
+  experiment_name: semoco_plainrvq16_w64_s4

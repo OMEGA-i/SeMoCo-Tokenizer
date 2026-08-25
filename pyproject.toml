@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "semoco"
+version = "1.0.0"
+description = "SeMoCo: a semantic-first whole-body motion tokenizer (structured RVQ codec over the UMR-499 motion representation)"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "numpy>=1.24",
+    "torch==2.12.0",
+    "pyyaml>=6.0",
+    "scipy>=1.11",
+    "pyarrow>=15",
+    "swanlab>=0.3",
+]
+
+[project.optional-dependencies]
+# SOMA-X FK runtime (SMPL-X + warp-lang). Required by `data.soma77_fk` and by
+# `tools/build_umr_dataset.py` (live FK at conversion time). Training / eval
+# hosts that consume the pre-built `umr499.npz` cache do NOT need [soma].
+soma = ["smplx", "trimesh", "warp-lang>=1.11.1", "rtree"]
+# Retrieval-teacher loading for the semantic variants (frozen TMR checkpoint
+# is instantiated from its Hydra config; see README §External assets).
+teacher = ["hydra-core>=1.3", "omegaconf>=2.3"]
+dev = ["pytest>=7.0", "pytest-mock>=3.10"]
+
+# Pin torch to the CUDA 12.6 wheel index. PyPI's default `torch` is a cu13 build
+# needing an nccl symbol (`ncclCommResume`) absent from nvidia-nccl-cu13 2.29.7,
+# so a plain re-resolve silently installs a torch that fails to import. The
+# download.pytorch.org cu126 build matches the nvidia-*-cu12 runtime the training
+# jobs run on, keeping `uv sync` reproducible and importable.
+[[tool.uv.index]]
+name = "pytorch-cu126"
+url = "https://download.pytorch.org/whl/cu126"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu126" }
+
+[tool.setuptools.packages.find]
+where = ["."]
+# Flat layout: package roots live directly under the repo (data/, models/, etc.).
+# `tools` is intentionally excluded — its scripts are CLI entry points, not a
+# library package.
+include = ["data*", "models*", "losses*", "experiments*", "eval*"]
+exclude = ["third_party*", "tests*", "tools*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-q"

@@ -1,0 +1,9 @@
+[submodule "third_party/SOMA-X"]
+	path = third_party/SOMA-X
+	url = https://github.com/huster-wgm/SOMA-X.git
+[submodule "third_party/kimodo"]
+	path = third_party/kimodo
+	url = https://github.com/nv-tlabs/kimodo
+[submodule "third_party/TMR-SOMA-RP-v1"]
+	path = third_party/TMR-SOMA-RP-v1
+	url = https://huggingface.co/nvidia/TMR-SOMA-RP-v1
